@@ -112,7 +112,7 @@ flowchart TD
 
 📝 Arsitektur Proyek (Unified Modeling System)
 arsitektur pada projek saya kali ini menggunakan typescrip dan express js untuk backend nya, lalu saya menggunakan postgresql database utama dan menggunakan redis sebagai database transite dan midlware otp
-untuk jwt menggunakan HS256, menggunakan smtp untuk mengirim otp, dll
+untuk jwt menggunakan ES256, menggunakan smtp untuk mengirim otp, dll
 
 📝 Tech Stack
 Jelaskan Contoh Tech Stack yang digunakan.
