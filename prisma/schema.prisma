@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ───────────────────────────────────────
+// ADMIN (dengan role)
+// ───────────────────────────────────────
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(BUSINESS)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
+
+// ───────────────────────────────────────
+// CLIENT (tanpa role)
+// ───────────────────────────────────────
+model Client {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("clients")
+}
+
+// ───────────────────────────────────────
+// REFRESH TOKEN
+// ───────────────────────────────────────
+model RefreshToken {
+  id           String   @id @default(cuid())
+  token        String   @unique
+  userId       String
+  userType     UserType // 'ADMIN' | 'CLIENT'
+  revoked      Boolean  @default(false)
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+// ───────────────────────────────────────
+// OTP (disimpan sementara, sebaiknya di Redis — tapi ini fallback)
+// ───────────────────────────────────────
+model Otp {
+  id        String   @id @default(cuid())
+  email     String
+  hash      String   // hashed OTP
+  used      Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([email, hash])
+  @@map("otps")
+}
+
+// ───────────────────────────────────────
+// ENUMERATIONS
+// ───────────────────────────────────────
+enum Role {
+  SYSADMIN
+  FINANCE
+  BUSINESS
+}
+
+enum UserType {
+  ADMIN
+  CLIENT
+}
